@@ -2,11 +2,11 @@ node {
     checkout scm
     withEnv(['HOME=.']) {          
         docker.image('docker:18.09-dind').withRun(""" --privileged  """) { c ->
-            docker.withRegistry( '','credentials-id') {    
+            docker.withRegistry( 'https://hub.docker.com/','credentials-id') {    
                 docker.image('hello-world:latest').inside(""" --link ${c.id}:docker --privileged -u root """) {
                     stage ('Build') {
                         sh """
-                            cd app
+                            cd src
                             docker-compose --host tcp://docker:2375 build
                             docker --host tcp://docker:2375 images
                             cd ..
