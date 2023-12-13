@@ -2,7 +2,7 @@ node {
     checkout scm
     withEnv(['HOME=.']) {          
         docker.image('docker:18.09-dind').withRun(""" --privileged  """) { c ->
-            docker.withRegistry( 'https://hub.docker.com/','credentials-id') {    
+            docker.withRegistry( '','credentials-id') {    
                 docker.image('hello-world:latest').inside(""" --link ${c.id}:docker --privileged -u root """) {
                     stage ('Build') {
                         sh """
