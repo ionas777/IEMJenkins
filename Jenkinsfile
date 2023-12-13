@@ -1,6 +1,3 @@
-
-Es scheint, dass du Docker-Netzwerke verwenden möchtest, um Container zu verbinden, anstatt den veralteten --link-Parameter zu verwenden. Hier ist eine modifizierte Version deiner Jenkins-Pipeline, die Docker-Netzwerke verwendet:
-
 node {
     checkout scm
     withEnv(['HOME=.']) {          
