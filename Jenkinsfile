@@ -9,15 +9,13 @@ node {
                         
                         sh """
                             docker network create $myNetwork
-                            cd src
                             docker-compose --host tcp://docker:2375 build
                             docker-compose --host tcp://docker:2375 up -d
                             docker --host tcp://docker:2375 images
-                            cd ..
                             
                             # Continue with your upload steps
-                            cp -RT app /app/src/workspace
-                            cd /app/src/workspace
+                            cp -RT app /src/workspace
+                            cd /src/workspace
                             ie-app-publisher-linux de c -u http://docker:2375
                             export IE_SKIP_CERTIFICATE=true
                             ie-app-publisher-linux em li -u "$IEM_URL" -e $USER_NAME -p $PSWD
