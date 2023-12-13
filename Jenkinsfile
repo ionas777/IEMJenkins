@@ -1,9 +1,14 @@
+
+Es scheint, dass du Docker-Netzwerke verwenden möchtest, um Container zu verbinden, anstatt den veralteten --link-Parameter zu verwenden. Hier ist eine modifizierte Version deiner Jenkins-Pipeline, die Docker-Netzwerke verwendet:
+
 node {
     checkout scm
     withEnv(['HOME=.']) {          
-        docker.image('docker:18.09-dind').withRun(""" --privileged  """) { c ->
-            docker.withRegistry( '','credentials-id') {    
-                docker.image('hello-world:latest').inside(""" --link ${c.id}:docker --privileged -u root """) {
+        docker.image('docker:18.09-dind').withRun("--privileged") { dindContainer ->
+            def myNetwork = docker.network('my-network')
+            
+            docker.withRegistry('', 'credentials-id') {    
+                docker.image('hello-world:latest').inside("--privileged -u root", network: myNetwork) {
                     stage ('Build') {
                         sh """
                             cd src
